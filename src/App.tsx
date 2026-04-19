@@ -7,6 +7,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { PublicLayout } from "@/components/layout/PublicLayout";
 import { BrokerLayout } from "@/components/broker/BrokerLayout";
 import { ProtectedRoute } from "@/components/broker/ProtectedRoute";
+import { AdminRoute } from "@/components/broker/AdminRoute";
 import Home from "./pages/Home";
 import Properties from "./pages/Properties";
 import PropertyDetail from "./pages/PropertyDetail";
@@ -15,6 +16,8 @@ import BrokerLogin from "./pages/broker/BrokerLogin";
 import Dashboard from "./pages/broker/Dashboard";
 import MyProperties from "./pages/broker/MyProperties";
 import PropertyForm from "./pages/broker/PropertyForm";
+import AdminBrokers from "./pages/admin/AdminBrokers";
+import AdminProperties from "./pages/admin/AdminProperties";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -45,6 +48,10 @@ const App = () => (
                 <Route path="/corretor/imoveis" element={<MyProperties />} />
                 <Route path="/corretor/imoveis/novo" element={<PropertyForm />} />
                 <Route path="/corretor/imoveis/:id/editar" element={<PropertyForm />} />
+                <Route element={<AdminRoute />}>
+                  <Route path="/corretor/admin/corretores" element={<AdminBrokers />} />
+                  <Route path="/corretor/admin/imoveis" element={<AdminProperties />} />
+                </Route>
               </Route>
             </Route>
 

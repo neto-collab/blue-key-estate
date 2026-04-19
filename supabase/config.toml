@@ -1,1 +1,4 @@
 project_id = "ytslxwsbhbnccfkwjubm"
+
+[functions.create-broker]
+verify_jwt = true
