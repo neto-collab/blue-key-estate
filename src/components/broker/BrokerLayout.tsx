@@ -103,15 +103,15 @@ export function BrokerLayout() {
             <LogOut className="h-4 w-4" />
           </Button>
         </header>
-        <nav className="lg:hidden flex border-b border-border bg-background">
-          {navItems.map((item) => (
+        <nav className="lg:hidden flex overflow-x-auto border-b border-border bg-background">
+          {[...navItems, ...(isAdmin ? adminItems : [])].map((item) => (
             <NavLink
               key={item.to}
               to={item.to}
               end={item.end}
               className={({ isActive }) =>
                 cn(
-                  "flex-1 px-3 py-3 text-center text-sm font-medium transition-smooth",
+                  "flex-shrink-0 px-4 py-3 text-center text-sm font-medium transition-smooth whitespace-nowrap",
                   isActive ? "text-primary border-b-2 border-secondary" : "text-muted-foreground"
                 )
               }
