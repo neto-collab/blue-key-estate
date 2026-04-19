@@ -3,8 +3,19 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import Index from "./pages/Index.tsx";
-import NotFound from "./pages/NotFound.tsx";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { PublicLayout } from "@/components/layout/PublicLayout";
+import { BrokerLayout } from "@/components/broker/BrokerLayout";
+import { ProtectedRoute } from "@/components/broker/ProtectedRoute";
+import Home from "./pages/Home";
+import Properties from "./pages/Properties";
+import PropertyDetail from "./pages/PropertyDetail";
+import Contact from "./pages/Contact";
+import BrokerLogin from "./pages/broker/BrokerLogin";
+import Dashboard from "./pages/broker/Dashboard";
+import MyProperties from "./pages/broker/MyProperties";
+import PropertyForm from "./pages/broker/PropertyForm";
+import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
@@ -14,11 +25,32 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            {/* Público */}
+            <Route element={<PublicLayout />}>
+              <Route path="/" element={<Home />} />
+              <Route path="/imoveis" element={<Properties />} />
+              <Route path="/imoveis/:id" element={<PropertyDetail />} />
+              <Route path="/contato" element={<Contact />} />
+            </Route>
+
+            {/* Login do corretor (oculto, sem layout público) */}
+            <Route path="/corretor/login" element={<BrokerLogin />} />
+
+            {/* Painel do corretor (protegido) */}
+            <Route element={<ProtectedRoute />}>
+              <Route element={<BrokerLayout />}>
+                <Route path="/corretor" element={<Dashboard />} />
+                <Route path="/corretor/imoveis" element={<MyProperties />} />
+                <Route path="/corretor/imoveis/novo" element={<PropertyForm />} />
+                <Route path="/corretor/imoveis/:id/editar" element={<PropertyForm />} />
+              </Route>
+            </Route>
+
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

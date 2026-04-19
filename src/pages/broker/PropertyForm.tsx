@@ -139,7 +139,7 @@ const PropertyForm = () => {
         const { error } = await supabase.from("properties").update(payload).eq("id", id!);
         if (error) throw error;
       } else {
-        const { data, error } = await supabase.from("properties").insert(payload).select("id").single();
+        const { data, error } = await supabase.from("properties").insert([payload]).select("id").single();
         if (error) throw error;
         propId = data.id;
       }
