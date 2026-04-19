@@ -1,5 +1,5 @@
 import { Outlet, Link, NavLink, useNavigate } from "react-router-dom";
-import { Building2, LayoutDashboard, Home, LogOut, Plus, Shield, Users, Database } from "lucide-react";
+import { Building2, LayoutDashboard, Home, LogOut, Plus, Shield, Users, Database, Inbox } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,7 @@ export function BrokerLayout() {
   const navItems = [
     { to: "/corretor", label: "Dashboard", icon: LayoutDashboard, end: true },
     { to: "/corretor/imoveis", label: "Meus imóveis", icon: Home, end: false },
+    { to: "/corretor/leads", label: "Leads", icon: Inbox, end: false },
   ];
 
   const adminItems = [

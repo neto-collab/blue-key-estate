@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatPriceWithSuffix, labelForType, labelForPurpose, BRAND } from "@/lib/constants";
 import { Skeleton } from "@/components/ui/skeleton";
+import { LeadForm } from "@/components/property/LeadForm";
 
 interface PropertyDetail {
   id: string;
@@ -203,6 +204,18 @@ const PropertyDetail = () => {
                 </Button>
               )}
             </div>
+          </div>
+
+          <div className="rounded-xl border border-border bg-card p-6 shadow-card">
+            <h3 className="font-display text-lg font-semibold text-primary mb-1">Tem interesse?</h3>
+            <p className="text-xs text-muted-foreground mb-4">
+              Deixe seu contato e o corretor responsável retornará em breve.
+            </p>
+            <LeadForm
+              propertyId={property.id}
+              brokerId={property.broker_id}
+              propertyTitle={property.title}
+            />
           </div>
         </aside>
       </div>
