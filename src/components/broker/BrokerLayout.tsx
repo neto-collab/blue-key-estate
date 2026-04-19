@@ -1,13 +1,16 @@
 import { Outlet, Link, NavLink, useNavigate } from "react-router-dom";
-import { Building2, LayoutDashboard, Home, LogOut, Plus } from "lucide-react";
+import { Building2, LayoutDashboard, Home, LogOut, Plus, Shield, Users, Database } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { BRAND } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
 export function BrokerLayout() {
   const { user, signOut } = useAuth();
+  const { isAdmin } = useIsAdmin();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -19,6 +22,11 @@ export function BrokerLayout() {
   const navItems = [
     { to: "/corretor", label: "Dashboard", icon: LayoutDashboard, end: true },
     { to: "/corretor/imoveis", label: "Meus imóveis", icon: Home, end: false },
+  ];
+
+  const adminItems = [
+    { to: "/corretor/admin/corretores", label: "Corretores", icon: Users, end: false },
+    { to: "/corretor/admin/imoveis", label: "Todos os imóveis", icon: Database, end: false },
   ];
 
   return (
