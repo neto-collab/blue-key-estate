@@ -14,6 +14,56 @@ export type Database = {
   }
   public: {
     Tables: {
+      leads: {
+        Row: {
+          broker_id: string
+          created_at: string
+          email: string | null
+          id: string
+          message: string | null
+          name: string
+          notes: string | null
+          phone: string
+          property_id: string | null
+          status: Database["public"]["Enums"]["lead_status"]
+          updated_at: string
+        }
+        Insert: {
+          broker_id: string
+          created_at?: string
+          email?: string | null
+          id?: string
+          message?: string | null
+          name: string
+          notes?: string | null
+          phone: string
+          property_id?: string | null
+          status?: Database["public"]["Enums"]["lead_status"]
+          updated_at?: string
+        }
+        Update: {
+          broker_id?: string
+          created_at?: string
+          email?: string | null
+          id?: string
+          message?: string | null
+          name?: string
+          notes?: string | null
+          phone?: string
+          property_id?: string | null
+          status?: Database["public"]["Enums"]["lead_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leads_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -190,6 +240,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "corretor"
+      lead_status: "novo" | "em_atendimento" | "finalizado"
       property_purpose: "venda" | "aluguel"
       property_status: "disponivel" | "vendido" | "alugado" | "reservado"
       property_type: "casa" | "apartamento" | "terreno" | "comercial" | "rural"
@@ -321,6 +372,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "corretor"],
+      lead_status: ["novo", "em_atendimento", "finalizado"],
       property_purpose: ["venda", "aluguel"],
       property_status: ["disponivel", "vendido", "alugado", "reservado"],
       property_type: ["casa", "apartamento", "terreno", "comercial", "rural"],
