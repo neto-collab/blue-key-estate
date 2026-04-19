@@ -19,6 +19,7 @@ import Dashboard from "./pages/broker/Dashboard";
 import MyProperties from "./pages/broker/MyProperties";
 import PropertyForm from "./pages/broker/PropertyForm";
 import Leads from "./pages/broker/Leads";
+import ChangePassword from "./pages/broker/ChangePassword";
 import AdminBrokers from "./pages/admin/AdminBrokers";
 import AdminProperties from "./pages/admin/AdminProperties";
 import NotFound from "./pages/NotFound";
@@ -54,6 +55,7 @@ const App = () => (
                 <Route path="/corretor/imoveis/novo" element={<PropertyForm />} />
                 <Route path="/corretor/imoveis/:id/editar" element={<PropertyForm />} />
                 <Route path="/corretor/leads" element={<Leads />} />
+                <Route path="/corretor/conta/senha" element={<ChangePassword />} />
                 <Route element={<AdminRoute />}>
                   <Route path="/corretor/admin/corretores" element={<AdminBrokers />} />
                   <Route path="/corretor/admin/imoveis" element={<AdminProperties />} />
