@@ -13,6 +13,8 @@ import Properties from "./pages/Properties";
 import PropertyDetail from "./pages/PropertyDetail";
 import Contact from "./pages/Contact";
 import BrokerLogin from "./pages/broker/BrokerLogin";
+import ForgotPassword from "./pages/broker/ForgotPassword";
+import ResetPassword from "./pages/broker/ResetPassword";
 import Dashboard from "./pages/broker/Dashboard";
 import MyProperties from "./pages/broker/MyProperties";
 import PropertyForm from "./pages/broker/PropertyForm";
@@ -41,6 +43,8 @@ const App = () => (
 
             {/* Login do corretor (oculto, sem layout público) */}
             <Route path="/corretor/login" element={<BrokerLogin />} />
+            <Route path="/corretor/esqueci-senha" element={<ForgotPassword />} />
+            <Route path="/corretor/redefinir-senha" element={<ResetPassword />} />
 
             {/* Painel do corretor (protegido) */}
             <Route element={<ProtectedRoute />}>
