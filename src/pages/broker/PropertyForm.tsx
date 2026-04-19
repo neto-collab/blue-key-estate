@@ -132,14 +132,14 @@ const PropertyForm = () => {
     setSaving(true);
     try {
       const cover = images.find((i) => i.isCover)?.url ?? images[0]?.url ?? null;
-      const payload = { ...parsed.data, broker_id: user.id, cover_image: cover };
+      const payload: any = { ...parsed.data, broker_id: user.id, cover_image: cover };
 
       let propId = id;
       if (isEdit) {
         const { error } = await supabase.from("properties").update(payload).eq("id", id!);
         if (error) throw error;
       } else {
-        const { data, error } = await supabase.from("properties").insert([payload]).select("id").single();
+        const { data, error } = await supabase.from("properties").insert(payload).select("id").single();
         if (error) throw error;
         propId = data.id;
       }
