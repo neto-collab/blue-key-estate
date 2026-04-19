@@ -48,6 +48,10 @@ const App = () => (
                 <Route path="/corretor/imoveis" element={<MyProperties />} />
                 <Route path="/corretor/imoveis/novo" element={<PropertyForm />} />
                 <Route path="/corretor/imoveis/:id/editar" element={<PropertyForm />} />
+                <Route element={<AdminRoute />}>
+                  <Route path="/corretor/admin/corretores" element={<AdminBrokers />} />
+                  <Route path="/corretor/admin/imoveis" element={<AdminProperties />} />
+                </Route>
               </Route>
             </Route>
 
