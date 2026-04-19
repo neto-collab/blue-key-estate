@@ -104,7 +104,17 @@ const BrokerLogin = () => {
               <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required maxLength={255} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Senha</Label>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="password">Senha</Label>
+                {mode === "login" && (
+                  <Link
+                    to="/corretor/esqueci-senha"
+                    className="text-xs text-muted-foreground hover:text-primary transition-smooth"
+                  >
+                    Esqueci minha senha
+                  </Link>
+                )}
+              </div>
               <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} maxLength={128} />
             </div>
             <Button type="submit" className="w-full h-11" disabled={submitting}>
