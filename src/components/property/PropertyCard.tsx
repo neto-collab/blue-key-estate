@@ -23,6 +23,8 @@ export function PropertyCard({ p, className }: { p: PropertyCardData; className?
   return (
     <Link
       to={`/imoveis/${p.id}`}
+      target="_blank"
+      rel="noopener noreferrer"
       className={cn(
         "group block rounded-xl overflow-hidden bg-card shadow-card hover:shadow-elegant transition-smooth border border-border/60",
         className
