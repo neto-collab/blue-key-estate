@@ -1,16 +1,29 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Loader2, ExternalLink } from "lucide-react";
+import { Loader2, ExternalLink, Pencil, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { BrokerPageHeader } from "@/components/broker/BrokerLayout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { formatPriceWithSuffix, labelForType, labelForPurpose, BRAND } from "@/lib/constants";
+import { toast } from "sonner";
 
 const AdminProperties = () => {
   const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [toDelete, setToDelete] = useState<{ id: string; title: string } | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     document.title = `Todos os imóveis — ${BRAND.name}`;
@@ -31,6 +44,31 @@ const AdminProperties = () => {
     };
     load();
   }, []);
+
+  const handleDelete = async () => {
+    if (!toDelete) return;
+    setDeleting(true);
+    try {
+      // Remove storage files associated with this property
+      const { data: imgs } = await supabase
+        .from("property_images")
+        .select("storage_path")
+        .eq("property_id", toDelete.id);
+      const paths = (imgs ?? []).map((i) => i.storage_path).filter(Boolean) as string[];
+      if (paths.length > 0) {
+        await supabase.storage.from("property-images").remove(paths);
+      }
+      const { error } = await supabase.from("properties").delete().eq("id", toDelete.id);
+      if (error) throw error;
+      setItems((prev) => prev.filter((p) => p.id !== toDelete.id));
+      toast.success("Imóvel excluído");
+      setToDelete(null);
+    } catch (e: any) {
+      toast.error("Erro ao excluir: " + e.message);
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -87,11 +125,26 @@ const AdminProperties = () => {
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    <Button asChild variant="ghost" size="icon">
-                      <Link to={`/imoveis/${p.id}`} target="_blank">
-                        <ExternalLink className="h-4 w-4" />
-                      </Link>
-                    </Button>
+                    <div className="flex items-center justify-end gap-1">
+                      <Button asChild variant="ghost" size="icon" title="Ver no site">
+                        <Link to={`/imoveis/${p.id}`} target="_blank">
+                          <ExternalLink className="h-4 w-4" />
+                        </Link>
+                      </Button>
+                      <Button asChild variant="ghost" size="icon" title="Editar">
+                        <Link to={`/corretor/imoveis/${p.id}/editar`}>
+                          <Pencil className="h-4 w-4" />
+                        </Link>
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        title="Excluir"
+                        onClick={() => setToDelete({ id: p.id, title: p.title })}
+                      >
+                        <Trash2 className="h-4 w-4 text-destructive" />
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
@@ -99,6 +152,31 @@ const AdminProperties = () => {
           </Table>
         )}
       </div>
+
+      <AlertDialog open={!!toDelete} onOpenChange={(o) => !o && setToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir imóvel?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta ação não pode ser desfeita. O imóvel <strong>{toDelete?.title}</strong> e todas as suas imagens
+              serão removidos permanentemente.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleting}>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault();
+                handleDelete();
+              }}
+              disabled={deleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {deleting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Excluir"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
