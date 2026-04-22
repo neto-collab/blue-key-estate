@@ -125,11 +125,26 @@ const AdminProperties = () => {
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    <Button asChild variant="ghost" size="icon">
-                      <Link to={`/imoveis/${p.id}`} target="_blank">
-                        <ExternalLink className="h-4 w-4" />
-                      </Link>
-                    </Button>
+                    <div className="flex items-center justify-end gap-1">
+                      <Button asChild variant="ghost" size="icon" title="Ver no site">
+                        <Link to={`/imoveis/${p.id}`} target="_blank">
+                          <ExternalLink className="h-4 w-4" />
+                        </Link>
+                      </Button>
+                      <Button asChild variant="ghost" size="icon" title="Editar">
+                        <Link to={`/corretor/imoveis/${p.id}/editar`}>
+                          <Pencil className="h-4 w-4" />
+                        </Link>
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        title="Excluir"
+                        onClick={() => setToDelete({ id: p.id, title: p.title })}
+                      >
+                        <Trash2 className="h-4 w-4 text-destructive" />
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
@@ -137,6 +152,31 @@ const AdminProperties = () => {
           </Table>
         )}
       </div>
+
+      <AlertDialog open={!!toDelete} onOpenChange={(o) => !o && setToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir imóvel?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta ação não pode ser desfeita. O imóvel <strong>{toDelete?.title}</strong> e todas as suas imagens
+              serão removidos permanentemente.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleting}>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault();
+                handleDelete();
+              }}
+              disabled={deleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {deleting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Excluir"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
